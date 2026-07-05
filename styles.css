@@ -21,22 +21,58 @@ body {
     flex-shrink: 0;
 }
 
-/* --- 기존 상단 요소들 디자인 코드는 동일하게 유지 --- */
-.header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px 20px; }
-.header h1 { margin: 0; font-size: 24px; font-weight: 700; color: #111; }
-.header .icon { font-size: 26px; color: #333; }
-.ticket-container { padding: 10px 20px; }
-.ticket-box { display: flex; justify-content: space-between; align-items: center; background-color: #f4f5f7; padding: 16px; border-radius: 12px; font-size: 15px; }
+/* --- 상단 요소들 디자인 수정 반영 --- */
+
+/* 1 & 2. 헤더 영역 크기 및 여백 줄임 */
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 12px 20px 6px 20px; /* 위아래 패딩 대폭 축소 (기존 20px 10px) */
+}
+.header h1 { 
+    margin: 0; 
+    font-size: 17px; /* 글씨 크기 기존 24px의 약 70% 수준인 17px로 축소 */
+    font-weight: 700; 
+    color: #111; 
+}
+.header .icon { 
+    font-size: 22px; /* 헤더 크기 축소에 맞춰 아이콘 크기도 자연스럽게 조절 */
+    color: #333; 
+}
+
+/* 3. 이용권 컨테이너 위아래 공간 줄임 */
+.ticket-container { 
+    padding: 4px 20px; /* 위아래 패딩 축소 (기존 10px) */
+}
+.ticket-box { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background-color: #f4f5f7; 
+    padding: 12px 16px; /* 내부 위아래 여백도 살짝 줄여서 더 슬림하게 변경 */
+    border-radius: 12px; 
+    font-size: 14px; 
+}
 .ticket-box .ticket-name { color: #333; font-weight: 500; }
-.ticket-box .ticket-change { color: #888; font-size: 14px; }
+.ticket-box .ticket-change { color: #888; font-size: 13px; }
 .ticket-box .ticket-change::before { content: '|'; margin-right: 10px; color: #ddd; }
-.calendar-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+
+/* 4. 달력 헤더(연/월 표시 부분) 위아래 공간 줄임 */
+.calendar-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 8px 20px; /* 위아래 패딩 축소 (기존 15px) */
+}
 .month-control { display: flex; align-items: center; gap: 15px; }
-.month-control h2 { margin: 0; font-size: 18px; font-weight: 600; color: #333; }
-.month-control .material-symbols-outlined { color: #ccc; font-size: 18px; }
+.month-control h2 { margin: 0; font-size: 16px; font-weight: 600; color: #333; }
+.month-control .material-symbols-outlined { color: #ccc; font-size: 16px; }
 .view-toggles { display: flex; gap: 10px; }
 .toggle-btn { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #333; gap: 2px; }
 .toggle-btn .material-symbols-outlined { font-size: 22px; }
+
+/* 달력 그리드 여백 유지 */
 .calendar-grid { padding: 0 20px 10px 20px; }
 .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 13px; margin-bottom: 15px; }
 .weekdays div { color: #888; }
@@ -44,7 +80,7 @@ body {
 .weekdays .sat { color: #1e58d2; }
 .days { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 15px; text-align: center; }
 .day { display: flex; justify-content: center; align-items: center; }
-.day-circle { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 15px; color: #aaa; background-color: #f0f0f0; }
+.day-circle { width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 13px; color: #aaa; background-color: #f0f0f0; }
 .day.empty .day-circle { background-color: transparent; color: transparent; }
 .day.sat .day-circle { color: #1e58d2; font-weight: bold; background-color: transparent; }
 .day.selected .day-circle { background-color: #1e58d2; color: white; font-weight: bold; }
@@ -55,24 +91,24 @@ body {
     flex: 1; /* 남는 세로 공간을 모두 가져감 */
     overflow-y: auto; /* 리스트 내부에서만 스크롤 활성화 */
     background-color: #f7f8fa; 
-    padding: 15px 20px;
+    padding: 10px 20px;
 }
 /* 모바일 앱처럼 스크롤바 숨김 (선택사항) */
 .schedule-list::-webkit-scrollbar { display: none; }
 
-.schedule-card { background-color: #ffffff; border-radius: 12px; padding: 18px 16px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.schedule-card { background-color: #ffffff; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .time-wrap { display: flex; align-items: center; gap: 8px; }
-.time-marker { width: 3px; height: 16px; background-color: #444; border-radius: 2px; }
-.time-text { font-size: 18px; font-weight: 700; color: #222; }
-.action-btn { border: 1px solid #ccc; background: transparent; color: #555; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-.card-body { display: flex; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
-.avatar { font-size: 46px; color: #d8d8d8; }
-.info { display: flex; flex-direction: column; gap: 4px; }
-.class-name { font-size: 15px; font-weight: 600; color: #333; }
-.class-desc { font-size: 13px; color: #888; }
-.card-footer { display: flex; align-items: center; gap: 6px; padding-top: 15px; color: #555; font-size: 13px; font-weight: 500; }
-.card-footer .material-symbols-outlined { font-size: 18px; }
+.time-marker { width: 3px; height: 13px; background-color: #444; border-radius: 2px; }
+.time-text { font-size: 15px; font-weight: 700; color: #222; }
+.action-btn { border: 1px solid #ccc; background: transparent; color: #555; padding: 4px 10px; border-radius: 20px; font-size: 11px; cursor: pointer; }
+.card-body { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
+.avatar { font-size: 38px; color: #d8d8d8; }
+.info { display: flex; flex-direction: column; gap: 3px; }
+.class-name { font-size: 13px; font-weight: 600; color: #333; }
+.class-desc { font-size: 11px; color: #888; }
+.card-footer { display: flex; align-items: center; gap: 6px; padding-top: 10px; color: #555; font-size: 11px; font-weight: 500; }
+.card-footer .material-symbols-outlined { font-size: 15px; }
 
 
 /* 📌 3. 하단 고정 영역 (크기가 줄어들지 않도록 flex-shrink: 0 적용) */
