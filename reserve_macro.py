@@ -9,7 +9,7 @@ pyautogui.PAUSE = 0
 IMG_SUNDAY = 'sunday.png'
 IMG_INSTRUCTOR = 'instructor.png'
 IMG_TIME_2030 = 'time_2030.png'
-IMG_RESERVE_BTN = 'reserve_btn.png'
+BTN_IMG_RESERVE = 'btn_reserve.png'
 IMG_POPUP_CONFIRM = 'popup_confirm.png'
 IMG_MENU_RESERVE = 'menu_reserve.png' # 하단 탭의 '수업예약' 메뉴 이미지 추가
 
@@ -84,7 +84,7 @@ def book_classes():
                 instructor_loc = pyautogui.locateOnScreen(IMG_INSTRUCTOR, confidence=CONFIDENCE)
                 
                 if time_loc and instructor_loc:
-                    reserve_btn = pyautogui.locateCenterOnScreen(IMG_RESERVE_BTN, confidence=CONFIDENCE)
+                    reserve_btn = pyautogui.locateCenterOnScreen(BTN_IMG_RESERVE, confidence=CONFIDENCE)
                     if reserve_btn:
                         pyautogui.click(reserve_btn)
                         print(f"-> {day_name} 20:30 수업 '예약' 버튼 클릭!")
