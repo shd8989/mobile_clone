@@ -124,10 +124,9 @@
     const randomInstructors = ['김지영', '이수민', '박지훈', '최은지'];
 
     // 08시부터 22시까지 반복하면서 카드 HTML 생성
-    for (let i = 8; i <= 22; i++) {
+    for (let i = 8; i <= 21; i++) {
     // 시간을 두 자리 숫자로 맞춤 (예: 8 -> 08)
     const startHour = i.toString().padStart(2, '0');
-    const startHour1 = (i+1).toString().padStart(2, '0');
     
     // 20시일 경우 '노보람', 그 외의 시간은 배열에서 랜덤 추출
     let instructorName = '';
@@ -143,9 +142,8 @@
         <div class="card-header">
             <div class="time-wrap">
             <span class="time-marker"></span>
-            <span class="time-text">${startHour}:30 ~ ${startHour1}:20</span>
+            <span class="time-text">${startHour}:00 ~ ${startHour}:50</span>
             </div>
-            <button class="action-btn" data-time="${startHour}:00" data-instructor="${instructorName}">예약</button>
         </div>
         
         <div class="card-body">
