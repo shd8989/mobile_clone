@@ -80,10 +80,37 @@ body {
 .weekdays .sat { color: #1e58d2; }
 .days { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 15px; text-align: center; }
 .day { display: flex; justify-content: center; align-items: center; }
-.day-circle { width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 13px; color: #aaa; background-color: #f0f0f0; }
+
+/* 🔵 기본 = 선택 가능(enable): 배경 없음, 평일 검정 글씨 */
+.day-circle {
+    width: 30px; height: 30px;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 50%;
+    font-size: 13px;
+    color: #111;                 /* 평일(enable) 검정 */
+    background-color: transparent;
+}
+
+/* 요일별 색상 (enable 상태에서만 적용) */
+.day.sun .day-circle { color: #e55050; }   /* 일요일 빨강 */
+.day.sat .day-circle { color: #1e58d2; }   /* 토요일 파랑 */
+
+/* ⚪ 선택 불가(disable): 회색 원 + 회색 글씨 (요일 색상보다 우선) */
+.day.disabled .day-circle {
+    background-color: #f0f0f0;
+    color: #aaa;
+    font-weight: normal;
+}
+
+/* 빈 칸 */
 .day.empty .day-circle { background-color: transparent; color: transparent; }
-.day.sat .day-circle { color: #1e58d2; font-weight: bold; background-color: transparent; }
-.day.selected .day-circle { background-color: #1e58d2; color: white; font-weight: bold; }
+
+/* 🔵 선택됨/오늘: 파란 원 + 흰 글씨 (가장 우선) */
+.day.selected .day-circle {
+    background-color: #1e58d2;
+    color: #fff;
+    font-weight: bold;
+}
 
 
 /* 📌 2. 스크롤 영역 (상단과 하단 사이의 남는 공간을 모두 차지하고, 내부에서만 스크롤) */

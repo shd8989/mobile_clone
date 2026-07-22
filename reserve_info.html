@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Mobile Clone - 수업예약 상세</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif;
+      background: #e9ecf1;
+      color: #1a1a1a;
+    }
+
+    /* 모바일 폭 컨테이너 */
+    .phone {
+      max-width: 430px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 76px; /* 하단 고정 버튼 공간 */
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+
+    /* ===== 헤더 ===== */
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+    .detail-header .back { font-size: 22px; cursor: pointer; }
+    .detail-header h1 { font-size: 18px; font-weight: 700; }
+
+    /* ===== 강사/수업 요약 ===== */
+    .class-summary { padding: 4px 16px 16px; }
+
+    .avatar-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: #d9dde3;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .avatar-circle .material-symbols-outlined {
+      font-size: 44px; color: #fff;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .class-title-row {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .class-title { font-size: 20px; font-weight: 800; }
+    .class-info-link { font-size: 13px; color: #1e58d2; font-weight: 600; }
+
+    .instructor-line {
+      font-size: 14px; color: #6b7178; margin-bottom: 10px;
+    }
+    .instructor-line .divider { margin: 0 6px; color: #cfd4da; }
+
+    .count-line {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 15px; font-weight: 700; margin-bottom: 12px;
+    }
+    .count-line .material-symbols-outlined { font-size: 18px; color: #4a4f56; }
+    .count-line .sep { color: #cfd4da; font-weight: 400; margin: 0 3px; }
+
+    .warn-text { font-size: 13px; color: #8a9099; line-height: 1.4; }
+    .warn-text .cancel-em { color: #f0473e; font-weight: 800; }
+
+    /* ===== 구분선 ===== */
+    .thick-divider { height: 8px; background: #f3f4f6; }
+
+    /* ===== 섹션 공통 ===== */
+    .section { padding: 18px 16px 4px; }
+    .section-label { font-size: 13px; color: #9aa0a8; margin-bottom: 10px; }
+
+    /* 수업 시간 박스 */
+    .time-box {
+      background: #f5f6f8;
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 17px; font-weight: 800;
+    }
+
+    /* 예약/취소/변경 카드 */
+    .policy-card {
+      background: #f5f6f8;
+      border-radius: 12px;
+      padding: 4px 16px;
+    }
+    .policy-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+    }
+    .policy-row + .policy-row { border-top: 1px solid #e6e8eb; }
+    .policy-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .policy-icon .material-symbols-outlined { font-size: 20px; font-variation-settings: 'FILL' 1; }
+    .icon-reserve { background: #e5edfc; }
+    .icon-reserve .material-symbols-outlined { color: #1e58d2; }
+    .icon-cancel  { background: #fde8e7; }
+    .icon-cancel  .material-symbols-outlined { color: #f0473e; }
+    .icon-change  { background: #fdf0d9; }
+    .icon-change  .material-symbols-outlined { color: #f5a623; }
+
+    .policy-text .p-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .policy-text .p-date  { font-size: 15px; font-weight: 800; }
+    .policy-text .p-date .until { color: #9aa0a8; font-weight: 500; font-size: 13px; }
+
+    /* ===== 하단 고정 버튼 ===== */
+    .bottom-cta {
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
+      width: 100%; max-width: 430px;
+      background: #2f6bff;
+      color: #fff;
+      text-align: center;
+      font-size: 16px; font-weight: 800;
+      padding: 16px 0;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* ===== 예약 확인 바텀시트 ===== */
+    .sheet-overlay {
+      display: none;                 /* 기본 숨김 */
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 50;
+    }
+    .sheet-overlay.open { display: block; }
+
+    .bottom-sheet {
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
+      width: 100%; max-width: 430px;
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 22px 20px 0;
+      z-index: 51;
+    }
+
+    .sheet-close {
+      position: absolute; top: 18px; right: 18px;
+      font-size: 26px; color: #333; cursor: pointer;
+    }
+    .sheet-q-icon .material-symbols-outlined {
+      font-size: 52px; color: #2f6bff;
+      font-variation-settings: 'FILL' 0, 'wght' 500;
+    }
+    .sheet-title {
+      font-size: 24px; font-weight: 800; line-height: 1.35;
+      margin: 14px 0 22px;
+    }
+
+    .sheet-instructor {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .sheet-instructor .avatar-sm {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #d9dde3;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sheet-instructor .avatar-sm .material-symbols-outlined {
+      font-size: 30px; color: #fff; font-variation-settings: 'FILL' 1;
+    }
+    .sheet-instructor .s-name { font-size: 17px; font-weight: 800; margin-bottom: 2px; }
+    .sheet-instructor .s-sub  { font-size: 13px; color: #6b7178; }
+    .sheet-instructor .divider { margin: 0 6px; color: #cfd4da; }
+
+    .sheet-time-label { font-size: 13px; color: #9aa0a8; margin-bottom: 8px; }
+    .sheet-time-box {
+      background: #f5f6f8; border-radius: 10px;
+      padding: 16px; font-size: 17px; font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    /* 좌우 끝까지 꽉 차는 직각 버튼 (시트 좌우 padding 상쇄) */
+    .sheet-actions {
+      display: flex; gap: 0;
+      margin: 0 -20px;
+    }
+    .sheet-actions button {
+      border: none; border-radius: 0;
+      font-size: 17px; font-weight: 800; padding: 20px 0;
+      cursor: pointer;
+    }
+    .sheet-actions .btn-cancel  { flex: 1;   background: #fff;    color: #333; }
+    .sheet-actions .btn-confirm { flex: 1.3; background: #2f6bff; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- 헤더 -->
+    <div class="detail-header">
+      <span class="material-symbols-outlined back" id="backBtn">arrow_back</span>
+      <h1>수업예약</h1>
+    </div>
+
+    <!-- 강사/수업 요약 -->
+    <div class="class-summary">
+      <div class="avatar-circle">
+        <span class="material-symbols-outlined">person</span>
+      </div>
+
+      <div class="class-title-row">
+        <span class="class-title">리포머</span>
+        <span class="class-info-link">강사 및 수업 정보</span>
+      </div>
+
+      <div class="instructor-line">
+        <span id="instructorName">노보람</span> 강사 <span class="divider">|</span> 리포머 룸
+      </div>
+
+      <div class="count-line">
+        <span class="material-symbols-outlined">person</span>
+        <span>예약 5 / 7명</span>
+        <span class="sep">|</span>
+        <span class="material-symbols-outlined">hourglass_empty</span>
+        <span>대기 0명</span>
+      </div>
+
+      <div class="warn-text">
+        최소 수강인원 3명이 미달되면 <span class="cancel-em">예약이 취소</span>될 수 있어요.
+      </div>
+    </div>
+
+    <div class="thick-divider"></div>
+
+    <!-- 수업 시간 -->
+    <div class="section">
+      <div class="section-label">수업 시간</div>
+      <div class="time-box">2026. 7. 07 (화) <span id="timeRange">21:00 ~ 21:50</span></div>
+    </div>
+
+    <!-- 예약 및 취소 가능 시간 -->
+    <div class="section">
+      <div class="section-label">예약 및 취소 가능 시간</div>
+      <div class="policy-card">
+        <div class="policy-row">
+          <div class="policy-icon icon-reserve">
+            <span class="material-symbols-outlined">event_available</span>
+          </div>
+          <div class="policy-text">
+            <div class="p-title">예약</div>
+            <div class="p-date">2026. 7. 07. 20:58 <span class="until">까지</span></div>
+          </div>
+        </div>
+
+        <div class="policy-row">
+          <div class="policy-icon icon-cancel">
+            <span class="material-symbols-outlined">event_busy</span>
+          </div>
+          <div class="policy-text">
+            <div class="p-title">취소</div>
+            <div class="p-date">2026. 7. 07. 09:00 <span class="until">까지</span></div>
+          </div>
+        </div>
+
+        <div class="policy-row">
+          <div class="policy-icon icon-change">
+            <span class="material-symbols-outlined">event_repeat</span>
+          </div>
+          <div class="policy-text">
+            <div class="p-title">예약 변경</div>
+            <div class="p-date">2026. 7. 07. 18:00 <span class="until">까지</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사용 수강권 (일부 노출) -->
+    <div class="section">
+      <div class="section-label">사용 수강권</div>
+    </div>
+
+    <!-- 하단 고정 CTA -->
+    <button class="bottom-cta" id="reserveBtn">예약하기</button>
+
+  </div>
+
+  <!-- 예약 확인 바텀시트 -->
+  <div class="sheet-overlay" id="sheetOverlay">
+    <div class="bottom-sheet">
+      <span class="material-symbols-outlined sheet-close" id="sheetClose">close</span>
+
+      <div class="sheet-q-icon">
+        <span class="material-symbols-outlined">help</span>
+      </div>
+
+      <div class="sheet-title">이 수업을<br>예약할까요?</div>
+
+      <div class="sheet-instructor">
+        <div class="avatar-sm"><span class="material-symbols-outlined">person</span></div>
+        <div>
+          <div class="s-name">리포머</div>
+          <div class="s-sub"><span id="sheetInstructor">노보람</span> 강사 <span class="divider">|</span> 리포머 룸</div>
+        </div>
+      </div>
+
+      <div class="sheet-time-label">수업 시간</div>
+      <div class="sheet-time-box">2026. 7. 07 (화) <span id="sheetTimeRange">21:00 ~ 21:50</span></div>
+
+      <div class="sheet-actions">
+        <button class="btn-cancel" id="sheetCancel">돌아가기</button>
+        <button class="btn-confirm" id="sheetConfirm">예약하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // index.html 카드에서 넘어온 값 반영
+    const params = new URLSearchParams(window.location.search);
+    const time = params.get('time');
+    const instructor = params.get('instructor');
+
+    if (instructor) {
+      document.getElementById('instructorName').textContent = instructor;
+      document.getElementById('sheetInstructor').textContent = instructor;
+    }
+    if (time) {
+      document.getElementById('timeRange').textContent = time;
+      document.getElementById('sheetTimeRange').textContent = time;
+    }
+
+    // 뒤로가기
+    document.getElementById('backBtn').addEventListener('click', function () {
+      history.back();
+    });
+
+    // ===== 예약 확인 바텀시트 =====
+    const sheetOverlay = document.getElementById('sheetOverlay');
+
+    function openSheet()  { sheetOverlay.classList.add('open'); }
+    function closeSheet() { sheetOverlay.classList.remove('open'); }
+
+    // '예약하기' → 팝업 열기
+    document.getElementById('reserveBtn').addEventListener('click', openSheet);
+
+    // 닫기(X), 돌아가기 → 팝업 닫기
+    document.getElementById('sheetClose').addEventListener('click', closeSheet);
+    document.getElementById('sheetCancel').addEventListener('click', closeSheet);
+
+    // 배경(딤) 클릭 시 닫기
+    sheetOverlay.addEventListener('click', function (e) {
+      if (e.target === sheetOverlay) closeSheet();
+    });
+
+    // 팝업 내 '예약하기' → 실제 예약 확정 로직 자리
+    document.getElementById('sheetConfirm').addEventListener('click', function () {
+      const p = new URLSearchParams();
+      if (time) p.set('time', time);
+      if (instructor) p.set('instructor', instructor);
+      window.location.href = `reserve_completed.html?${p.toString()}`;
+    });
+  </script>
+</body>
+</html>

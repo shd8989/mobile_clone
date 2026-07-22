@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Mobile Clone - 수업예약</title>
-  
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  
+
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -49,45 +49,41 @@
       <div class="day empty"><div class="day-circle"></div></div>
       <div class="day empty"><div class="day-circle"></div></div>
       <div class="day empty"><div class="day-circle"></div></div>
-      <div class="day"><div class="day-circle" style="background:transparent;">1</div></div>
-      <div class="day"><div class="day-circle" style="background:transparent;">2</div></div>
-      <div class="day"><div class="day-circle" style="background:transparent;">3</div></div>
+      <div class="day"><div class="day-circle">1</div></div>
+      <div class="day"><div class="day-circle">2</div></div>
+      <div class="day"><div class="day-circle">3</div></div>
       <div class="day sat"><div class="day-circle">4</div></div>
-      <div class="day selected"><div class="day-circle">5</div></div>
+      <div class="day sun"><div class="day-circle">5</div></div>
       <div class="day"><div class="day-circle">6</div></div>
       <div class="day"><div class="day-circle">7</div></div>
       <div class="day"><div class="day-circle">8</div></div>
       <div class="day"><div class="day-circle">9</div></div>
       <div class="day"><div class="day-circle">10</div></div>
-      <div class="day"><div class="day-circle">11</div></div>
-      <div class="day"><div class="day-circle">12</div></div>
+      <div class="day sat"><div class="day-circle">11</div></div>
+      <div class="day sun"><div class="day-circle">12</div></div>
       <div class="day"><div class="day-circle">13</div></div>
       <div class="day"><div class="day-circle">14</div></div>
       <div class="day"><div class="day-circle">15</div></div>
       <div class="day"><div class="day-circle">16</div></div>
       <div class="day"><div class="day-circle">17</div></div>
-      <div class="day"><div class="day-circle">18</div></div>
-      <div class="day"><div class="day-circle">19</div></div>
+      <div class="day sat"><div class="day-circle">18</div></div>
+      <div class="day selected"><div class="day-circle">19</div></div>
       <div class="day"><div class="day-circle">20</div></div>
       <div class="day"><div class="day-circle">21</div></div>
       <div class="day"><div class="day-circle">22</div></div>
       <div class="day"><div class="day-circle">23</div></div>
       <div class="day"><div class="day-circle">24</div></div>
-      <div class="day"><div class="day-circle">25</div></div>
+      <div class="day sat"><div class="day-circle">25</div></div>
       <div class="day"><div class="day-circle">26</div></div>
       <div class="day"><div class="day-circle">27</div></div>
       <div class="day"><div class="day-circle">28</div></div>
       <div class="day"><div class="day-circle">29</div></div>
       <div class="day"><div class="day-circle">30</div></div>
-      <div class="day"><div class="day-circle">31</div></div>
-      <!--
-    -->
+      <div class="day disabled"><div class="day-circle">31</div></div>
     </div>
   </div>
 
 <div class="schedule-list" id="scheduleList"></div>
-
-<include src="reservationPopup.html"></include>
 
   <div class="bottom-nav">
     <div class="nav-item">
@@ -114,83 +110,71 @@
 
   <script>
     const scheduleList = document.getElementById('scheduleList');
-    const popup = document.getElementById('reservationPopup');
-    const confirmBtn = document.getElementById('confirmBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const popupMessage = document.getElementById('popupMessage');
     let htmlContent = '';
 
     // 임의의 강사 이름 4개 배열 생성
     const randomInstructors = ['김지영', '이수민', '박지훈', '최은지'];
 
-    // 08시부터 22시까지 반복하면서 카드 HTML 생성
+    // 08시부터 21시까지 반복하면서 카드 HTML 생성
     for (let i = 8; i <= 21; i++) {
-    // 시간을 두 자리 숫자로 맞춤 (예: 8 -> 08)
-    const startHour = i.toString().padStart(2, '0');
-    
-    // 20시일 경우 '노보람', 그 외의 시간은 배열에서 랜덤 추출
-    let instructorName = '';
-    if (i === 20) {
+      // 시간을 두 자리 숫자로 맞춤 (예: 8 -> 08)
+      const startHour = i.toString().padStart(2, '0');
+
+      // 20시일 경우 '노보람', 그 외의 시간은 배열에서 랜덤 추출
+      let instructorName = '';
+      if (i === 20) {
         instructorName = '노보람';
-    } else {
+      } else {
         const randomIndex = Math.floor(Math.random() * randomInstructors.length);
         instructorName = randomInstructors[randomIndex];
-    }
-    
-    htmlContent += `
-        <div class="schedule-card">
-        <div class="card-header">
+      }
+
+      const timeLabel = `${startHour}:00 ~ ${startHour}:50`;
+
+      // ✅ 카드(cell) 전체를 클릭 대상으로 변경.
+      //    - 카드 클릭 시 예약 상세 페이지(reserve_info.html)로 이동
+      //    - 클릭 시 사용할 정보를 data 속성으로 카드에 부여
+      htmlContent += `
+        <div class="schedule-card" style="cursor:pointer;"
+             data-time="${timeLabel}" data-instructor="${instructorName}">
+          <div class="card-header">
             <div class="time-wrap">
-            <span class="time-marker"></span>
-            <span class="time-text">${startHour}:00 ~ ${startHour}:50</span>
+              <span class="time-marker"></span>
+              <span class="time-text">${timeLabel}</span>
             </div>
-        </div>
-        
-        <div class="card-body">
+          </div>
+
+          <div class="card-body">
             <span class="material-symbols-outlined avatar" style="font-variation-settings: 'FILL' 1;">account_circle</span>
             <div class="info">
-            <div class="class-name">리포머</div>
-            <div class="class-desc">${instructorName} 강사 | 리포머 룸</div>
+              <div class="class-name">리포머</div>
+              <div class="class-desc">${instructorName} 강사 | 리포머 룸</div>
             </div>
-        </div>
-        
-        <div class="card-footer">
+          </div>
+
+          <div class="card-footer">
             <span class="material-symbols-outlined">person</span>
             <span>예약 7 / 7명</span>
+          </div>
         </div>
-        </div>
-    `;
+      `;
     }
 
     // 생성된 HTML을 스케줄 리스트 영역에 삽입
     scheduleList.innerHTML = htmlContent;
 
-    // 2. 예약 버튼 클릭 이벤트 (이벤트 위임 방식 적용)
+    // 카드(cell) 클릭 → 예약 상세 페이지(reserve_info.html)로 이동
     scheduleList.addEventListener('click', function(e) {
-    // 클릭한 요소가 'action-btn' 클래스를 가지고 있는지 확인
-    if (e.target.classList.contains('action-btn')) {
-        // 버튼에 심어둔 데이터 가져오기
-        const time = e.target.getAttribute('data-time');
-        const instructor = e.target.getAttribute('data-instructor');
-        
-        // 팝업 메시지 동적 업데이트
-        popupMessage.innerHTML = `<strong>${time}</strong> 시간의<br><strong>${instructor} 강사님</strong> 수업을 예약하시겠습니까?`;
-        
-        // 팝업 띄우기 (숨김 해제)
-        popup.style.display = 'flex';
-    }
-    });
+      // 클릭 지점에서 가장 가까운 카드를 찾음 (카드 내부 어디를 눌러도 동작)
+      const card = e.target.closest('.schedule-card');
+      if (!card) return;
 
-    // 3. 팝업 취소 버튼 클릭 이벤트
-    cancelBtn.addEventListener('click', function() {
-    popup.style.display = 'none'; // 팝업 숨기기
-    });
+      const time = card.getAttribute('data-time');
+      const instructor = card.getAttribute('data-instructor');
 
-    // 4. 팝업 확인 버튼 클릭 이벤트
-    confirmBtn.addEventListener('click', function() {
-    // 실제 예약 API 호출 등의 로직이 들어갈 자리
-    alert('예약이 완료되었습니다!');
-    popup.style.display = 'none'; // 팝업 숨기기
+      // 선택 정보를 쿼리스트링으로 전달하며 페이지 이동
+      const params = new URLSearchParams({ time, instructor });
+      window.location.href = `reserve_info.html?${params.toString()}`;
     });
   </script>
 </body>
